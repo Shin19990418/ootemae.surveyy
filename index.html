@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>確認ダイアログ</title>
+    <style>
+        body {
+            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .dialog-container {
+            width: 90%;
+            max-width: 400px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 20px;
+            margin: 10px;
+        }
+        
+        .question {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+            padding: 10px;
+        }
+        
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .button-yes {
+            background-color: #3b7ddd;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        .button-no {
+            background-color: white;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        /* 第二の画面のスタイル */
+        .second-screen {
+            display: none;
+            width: 90%;
+            max-width: 400px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 20px;
+        }
+        
+        .second-question {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+            padding: 10px;
+        }
+        
+        .second-description {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 25px;
+            color: #666;
+        }
+        
+        /* メディアクエリ - スマホ向け調整 */
+        @media (max-width: 480px) {
+            .question, .second-question {
+                font-size: 16px;
+                padding: 8px;
+                margin-bottom: 20px;
+            }
+            
+            .second-description {
+                font-size: 13px;
+                margin-bottom: 20px;
+            }
+            
+            .button-yes, .button-no {
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            .dialog-container, .second-screen {
+                padding: 15px;
+            }
+        }
+        
+        .btn-yes, .btn-no {
+            display: none; /* 不要なスタイルを非表示に */
+        }
+    </style>
+</head>
+<body>
+    <!-- 初期画面 -->
+    <div class="dialog-container" id="firstScreen">
+        <div class="question">
+            「エニタイムフィットネス大阪大手前店」はおすすめできますか？
+        </div>
+        <div class="button-container">
+            <button class="button-yes" id="yesButton">はい</button>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfSq22AXDgrv9Lw6M-yAJMxl9qe9vtjptxdsQ85DAzJHSYvlQ/viewform?usp=header" class="button-no">いいえ</a>
+        </div>
+    </div>
+    
+    <!-- 第二の画面 -->
+    <div class="second-screen" id="secondScreen">
+        <div class="second-question">Googleクチコミをお願いできますか？</div>
+        <div class="second-description">皆様のクチコミが励みになります！</div>
+        <div class="button-container">
+            <a href="https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fwww.google.com%2Fmaps%2Fapi%2Fjs%2FReviewsService.CrossOriginAuthSuccess%3Fkey%3DAIzaSyBcv0QfUNUfBwo8pIGJ3teNCkaluSGUWus%26origin%3Dhttps%253A%252F%252Fwww.google.com&hl=ja&ifkv=AXH0vVspQxzCwl1LqS0yHAChKuOpWgiCycp790nc-XR9SW4mxP7X9RGDFrCAm-cEphtWCOfDVix1qg&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S1126011125%3A1744333224773733" class="button-yes">はい</a>
+            <button class="button-no" id="secondNoButton">いいえ</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 最初の「はい」ボタンのクリックイベント
+            const yesButton = document.getElementById('yesButton');
+            yesButton.addEventListener('click', function() {
+                document.getElementById('firstScreen').style.display = 'none';
+                document.getElementById('secondScreen').style.display = 'block';
+            });
+            
+            // 二つ目の画面の「いいえ」ボタンのクリックイベント
+            const secondNoButton = document.getElementById('secondNoButton');
+            secondNoButton.addEventListener('click', function() {
+                // サンクスページの内容を表示
+                document.getElementById('secondScreen').style.display = 'none';
+                
+                // 新しいお礼メッセージ要素を作成
+                const thankYouScreen = document.createElement('div');
+                thankYouScreen.className = 'dialog-container';
+                thankYouScreen.style.maxWidth = '400px';
+                thankYouScreen.style.width = '90%';
+                thankYouScreen.innerHTML = `
+                    <div class="question" style="padding: 30px 20px; white-space: nowrap; text-align: center;">
+                        アンケートのご協力ありがとうございました！
+                    </div>
+                `;
+                document.body.appendChild(thankYouScreen);
+            });
+        });
+    </script>
+</body>
+</html>
